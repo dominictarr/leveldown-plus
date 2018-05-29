@@ -46,6 +46,8 @@ module.exports = function (db, options) {
     opts.keys   = opts.keys  !== false
     opts.values = opts.value !== false
     opts.highWaterMark = 128
+    //limit: undefined breaks leveldown!
+    opts.limit = opts.limit >= 0 ? opts.limit : -1
 
     var keyCodec   = opts.keyEncoding   || options.keyEncoding || {}
     var valueCodec = opts.valueEncoding || options.valueEncoding || {}
@@ -59,14 +61,15 @@ module.exports = function (db, options) {
   }
 
   function read (opts) {
-    var iterator = db.iterator(opts = streamOptions(opts))
-
+    opts = streamOptions(opts)
+    var iterator = db.iterator(opts)
     return function (abort, cb) {
       if(abort)
         iterator.end(function () { cb(true) })
       else
         iterator.next(function (err, key, value) {
-          if(key == null) return cb(true)
+          if(key == null)
+            return iterator.end(function () { cb(true) })
           if(opts.keys)
             key = decodeKey(key, opts, options)
           if(opts.values)
@@ -113,9 +116,8 @@ module.exports = function (db, options) {
 
   emitter.post = function (opts, each) {
     function onBatch (ops) {
-      for(var i = 0; i < ops.length; i++) {
+      for(var i = 0; i < ops.length; i++)
         if(ltgt.contains(opts, ops[i].key)) each(ops[i])
-      }
     }
     emitter.on('batch', onBatch)
     return function () {
