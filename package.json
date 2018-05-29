@@ -1,0 +1,26 @@
+{
+  "name": "leveldown-plus",
+  "description": "",
+  "version": "1.0.0",
+  "homepage": "https://github.com/dominictarr/leveldown-plus",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dominictarr/leveldown-plus.git"
+  },
+  "dependencies": {
+    "ltgt": "^2.2.1",
+    "pull-level": "^2.0.4",
+    "pull-live": "^1.0.1"
+  },
+  "devDependencies": {
+    "leveldown": "^4.0.1",
+    "pull-stream": "^3.6.8",
+    "rimraf": "^2.6.2",
+    "tape": "^4.9.0"
+  },
+  "scripts": {
+    "test": "set -e; for t in test/*.js; do node $t; done"
+  },
+  "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://dominictarr.com)",
+  "license": "MIT"
+}

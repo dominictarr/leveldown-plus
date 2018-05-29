@@ -1,0 +1,6 @@
+# leveldown-plus
+
+
+## License
+
+MIT
